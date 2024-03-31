@@ -1,5 +1,6 @@
 const express = require('express');
 const admin = require('firebase-admin');
+const serviceAccountKey = require('./serviceAccountKey.json');
 
 const app = express();
 
@@ -45,16 +46,18 @@ app.post("/login", (req, res) => {
   });
 
 app.post('/storeToken', (req, res) => {
-  const { userId, token } = req.body;   //프론트에서 잘 key어떻게 넘겨줄지 생각
+  const { userId, token } = req.body;   //프론트에서 key어떻게 잘 넘겨줄지 생각
 
   // 토큰 저장하기
   db.set(userId, token);
+  console.log(`token store success for ${userId}'s token`);
+  console.log(`token value is ${token}`);
 
   res.status(200).send('Token stored successfully');
 });
 
 app.post('/sendNotification', (req, res) => {
-  const userId = req.body;
+  const {userId} = req.body;
   const { data } = "검증자로 선정되셨습니다. 검증을 하시겠습니까??";
 
   // DB에서 deviceToken 가져오기
