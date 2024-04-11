@@ -47,28 +47,28 @@ app.post("/login", (req, res) => {
   });
 
 app.post('/storeToken', (req, res) => {
-  const { userId, token } = req.body;   //프론트에서 key어떻게 잘 넘겨줄지 생각
+  const { username, token } = req.body;   //프론트에서 key어떻게 잘 넘겨줄지 생각
   var tokenKey;
   // 토큰 저장하기
-  if (userId == '1234'){
+  if (username == '1234'){
     tokenKey = '0';
   }
   else{
     tokenKey = '1';
   }
   db.set(tokenKey, token);
-  console.log(`token store success for ${userId}'s token`);
+  console.log(`token store success for ${username}'s token`);
   console.log(`token value is ${token}`);
 
   res.status(200).send('Token stored successfully');
 });
 
 app.post('/sendNotification', (req, res) => {
-  const {userId} = req.body;
+  const {username} = req.body;
   const { data } = "검증자로 선정되셨습니다. 검증을 하시겠습니까??";
   var tokenKey;
 
-  if (userId == '1234'){  //상대에게 보내야 하기 때문에 상대방의 token가져옴
+  if (username == '1234'){  //상대에게 보내야 하기 때문에 상대방의 token가져옴
     tokenKey = '1';
   }
   else{
@@ -78,7 +78,7 @@ app.post('/sendNotification', (req, res) => {
   const deviceToken = db.get(tokenKey);   //프론트에서 알맞게 넘겨주도록 수정
 
   if (!deviceToken) {
-    res.status(400).send(`No device token found for user: ${userId}`);
+    res.status(400).send(`No device token found for user: ${username}`);
     return;
   }
   const message = {
